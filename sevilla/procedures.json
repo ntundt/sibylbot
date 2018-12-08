@@ -1,0 +1,125 @@
+[
+    {
+        "procedure_id": 1,
+        "balance": 20,
+        "description": "New post contents creating",
+        "description_ru": "пост в группе",
+        "excluded":false,
+        "associations": [
+        	"пост",
+        	"контент"
+        ]
+    },
+    {
+        "procedure_id": 2,
+        "balance": 10,
+        "description": "Circle",
+        "description_ru": "активное участие в работе кружка",
+        "excluded":false,
+        "associations": [
+        	"кружок",
+        	"кружка"
+        ]
+    },
+    {
+        "procedure_id": 3,
+        "balance": 10,
+        "description": "Potential members invition",
+        "description_ru": "приглашение в Объединение новых членов",
+        "excluded":false,
+        "associations": [
+        	"приглашение"
+        ]
+    },
+    {
+        "procedure_id": 4,
+        "balance": 10,
+        "description": "Agitation",
+        "description_ru": "агитация",
+        "excluded":false,
+        "associations": [
+        	"агитация"
+        ]
+    },
+    {
+        "procedure_id": 5,
+        "balance": 0,
+        "description": "Parliament membership [excluded]",
+        "description_ru": "членство в Верховном Совете [исключён]",
+        "excluded":true,
+        "associations": [
+        	"вс",
+        	"верховный",
+        	"совет"
+        ]
+    },
+    {
+        "procedure_id": 6,
+        "balance": -1,
+        "description": "Wordfilter",
+        "description_ru": "мат",
+        "excluded":false,
+        "associations": [
+        	"мат",
+        	"вордфильтр",
+        	"сквернословие",
+        	"сквернословство"
+        ]
+    },
+    {
+        "procedure_id": 7,
+        "balance": -10,
+        "description": "Abuse",
+        "description_ru": "оскорбление",
+        "excluded":false,
+        "associations": [
+        	"оскорбление"
+        ]
+    },
+    {
+        "procedure_id": 8,
+        "balance": -20,
+        "description": "Otherfilter",
+        "description_ru": "запрещённые материалы в чате",
+        "excluded":false,
+        "associations": [
+        	"нецензурщина",
+        	"запрещённые",
+        	"материалы"
+        ]
+    },
+    {
+        "procedure_id": 9,
+        "balance": -50,
+        "description": "Passive",
+        "description_ru": "пассивность в работе",
+        "excluded":false,
+        "associations": [
+        	"пассивность",
+        	"неактивность",
+        	"пассив",
+        	"неактив"
+        ]
+    },
+    {
+        "procedure_id": 10,
+        "balance": 0,
+        "description": "Exclusion [excluded]",
+        "description_ru": "исключение из объединения [исключён]",
+        "excluded":true,
+        "associations": [
+        	"исключение"
+        ]
+    },
+    {
+        "procedure_id": 11,
+        "balance": 30,
+        "description": "Literature reading",
+        "description_ru": "чтение литературы",
+        "excluded":false,
+        "associations": [
+        	"чтение",
+        	"литература"
+        ]
+    }
+]

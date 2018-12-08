@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Веб-интерфейс Севиллы</title>
+		<style>
+			body, html {
+				padding: 0;
+				background-color: #edeef0;
+				margin: 0;
+				font-family: -apple-system,BlinkMacSystemFont,Roboto,Helvetica Neue,sans-serif;
+				font-size: 13px;
+				height: calc(100vh - 30px);
+			}
+			.wrapper {
+				margin: auto;
+				width: 550px;
+				height: 100%;
+			}
+			.titlebox {
+				height: 48px;
+				border-bottom: 1px #e7e8ec solid;
+				background-color: #fff;
+				border-top-right-radius: 2px;
+				border-top-left-radius: 2px;
+				width: 550px;
+			}
+			.bodybox {
+				padding: 20px;
+				background: #fff;
+				border-bottom-left-radius: 2px;
+				border-bottom-right-radius: 2px;
+			}
+			.vklikebox {
+				width: 550px;
+				margin: auto;
+				margin-top: 15px;
+				box-shadow: 0 1px 0 0 #d7d8db, 0 0 0 1px #e3e4e8;
+				border-radius: 2px;
+				max-height: calc(100vh - 15px - 15px);
+				position: relative;
+			}
+			.success, .fail {
+				margin-bottom: 15px;
+				background-color: #effaed;
+				border: 1px solid #afd4a9;
+				border-radius: 2px;
+				padding: 7px 18px 9px;
+				padding-left: 55px;
+				background: #effaed url(/ui/msg_ok.png?1) no-repeat 12px 12px;
+				min-height: 40px;
+				line-height: 38px;
+			}
+			.fail {
+				border-color: #f2ab99;
+				background-color: #ffefe9;
+				background: #ffefe9 url(/ui/msg_error.png?1) no-repeat 12px 12px;;
+			}
+			.msg-internal-text {
+				display: inline-block;
+				vertical-align: middle;
+				line-height: 150%;
+			}
+			.command-container {
+				padding: 5px 9px 7px;
+				resize: vertical;
+				width: 490px;
+				min-height: 300px;
+				border: 1px solid #d3d9de;
+				border-radius: 2px;
+			}
+			.selector {
+				color: #222;
+			}
+			.fivepxleft {
+				margin-left: 5px;
+			}
+			.nopadding {
+				padding: 0;
+				border: 1px #000 solid;
+				height: 21px;
+				margin-top: 5px;
+			}
+			.selector-container {
+				display: inline-block;
+				height: 31px;
+				margin-top: 15px;
+				overflow: hidden;
+				width: 240px;
+				border-right: 1px solid #d3d9de;
+				border-top-right-radius: 2px;
+				border-bottom-right-radius: 2px;
+				position: relative;
+			}
+			.selector-container select {
+				background: transparent;
+				width: 260px;
+				padding-top: 5px;
+				padding-left: 9px;
+				padding-bottom: 5px;
+				border: 1px solid #d3d9de;
+				border-radius: 2px;
+				cursor: pointer;
+			}
+			.submit {
+				background-color: #5181b8;
+				border: none;
+				color: #fff;
+				padding: 7px 16px 8px;
+				display: inline-block;
+				white-space: nowrap;
+				outline: none;
+				vertical-align: top;
+				line-height: 15px;
+				text-align: center;
+				border-radius: 4px;
+				box-sizing: border-box;
+				margin-top: 15px;
+				margin-left: 15px;
+				cursor: pointer;
+			}
+			.dropdown-arrow {
+				background: url(/ui/dropdown_arrow.png) no-repeat 0 50%;
+				position: absolute;
+				right: 11px;
+				top: 12px;
+				width: 11px;
+				height: 7px;
+			}
+			.top-pic {
+				width: 31px;
+				height: 31px;
+				border-radius: 50%;
+				right: 20px;
+				top: 8px;
+				position: absolute;
+			}
+			.back-to-home-a {
+				display: block;
+				padding-left: 20px;
+				height: 19px;
+				color: #818d99;
+				text-decoration: none;
+				padding-top: 15px;
+				width: 120px;
+				padding-bottom: 15px;
+			}
+			.centertext {
+				width: 100px;
+				text-align: center;
+				position: absolute;
+				top: 15px;
+				left: 225px;
+			}
+			a {
+				text-decoration: none;
+			}
+			a:hover {
+				color: inherit;
+			}
+			.button {
+				background-color: #5181b8;
+				border: none;
+				color: #fff;
+				padding: 7px 16px 8px;
+				display: inline-block;
+				white-space: nowrap;
+				outline: none;
+				vertical-align: top;
+				line-height: 15px;
+				text-align: center;
+				border-radius: 4px;
+				box-sizing: border-box;
+				cursor: pointer;
+			}
+			.button:hover {
+				color: #fff;
+			}
+			.bigger-line-height {
+				line-height: 29px;
+			}
+			.centertext span {
+				width: 100%;
+			}
+			.center {
+				margin: auto;
+				text-align: center;
+			}
+			.wwb {
+				word-wrap: break-word;
+			}
+			a[title="Hosted on free web hosting 000webhost.com. Host your own website for FREE."] {
+				display: none !important;
+			}
+			div[style="text-align: right;position: fixed;z-index:9999999;bottom: 0; width: 100%;cursor: pointer;line-height: 0;display:block !important;"] {
+				height: 0 !important;
+			}
+		</style>
+		<link rel="shortcut icon" href="/ui/sevil_favicon.ico" type="image/x-icon">
+	</head>
+	<body>
+		<div class="wrapper">
+			<div class="vklikebox">
+				<div class="titlebox"><a href="/" class="back-to-home-a">На главную</a><a href="https://vk.com/sevilcounter"><img src="/ui/sevil.png" class="top-pic"></a><div class="centertext"><span><a href="https://vk.com/sevilcounter">Севилла</a></span></div></div>
+				<div class="bodybox">
+					<?php if(isset($_COOKIE['user_id'])) { ?>
+						<?php if ($wi->user_is_admin($_COOKIE['user_id'])) { ?>
+							<?php if(isset($_POST['command'])) { ?>
+								<?php if(!isset($error)) { ?>
+									<div class="success">
+										<div class="msg-internal-text">Выполнено успешно</div>
+									</div>
+									<span class="wwb"><?=$wi->response;?></span>
+								<?php } else { ?>
+									<div class="fail">
+										<div class="msg-internal-text">Есть ошибки</div>
+									</div>
+									<span class="wwb"><?=$wi->response;?></span>
+								<?php } ?>
+							<?php } ?>
+							<form method="post">
+								<textarea name="command" id="command-container" rows="15" class="command-container"><?=isset($_POST['command'])?$_POST['command']:''?></textarea>
+								<div class="selector-container">
+									<select name="whatToDo" class="selector">
+										<option value="exec">VK.API.execute()</option>
+										<option value="sqlr">MySQL Request</option>
+									</select>
+									<span class="dropdown-arrow"></span>
+								</div><input class="submit" type="submit" value="Выполнить">
+							</form>
+						<?php }  else { ?>
+							<div class="center"><span class="bigger-line-height">У Вас нет прав администратора.</span> <a class="button" href="#">Подробнее</a></div>
+						<?php } ?>
+					<?php } else { ?>
+						<div class="center"><span class="bigger-line-height">Вы не вошли.</span> <a class="button" href="https://vk.com/away.php?utf=1&to=https%3A%2F%2Foauth.vk.com%2Fauthorize%3Fclient_id%3D6763664%26scope%3D65536%26redirect_uri%3Dhttps%3A%2F%2Fwww.redcomm.tk%2Foauth.php%26dispaly%3Dpage%26response_type%3Dcode%26v%3D5.92%26state%3Dsevilweblogin">Войти</a></div>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
