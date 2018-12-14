@@ -3,6 +3,10 @@ Sybil is a VK bot that could be used as chat-manager and scorecounter
 
 How to write commands: https://vk.com/page-173076069_54615607
 
+### Installation
+Copy files from repo to your folder and then create `datasheets` and `images` folders in it. There is some constants that need to be set in `handler.php`, `oauth.php`, `sevilla/BotInterface` and `sevilla/WebInterface` files. You'll find instructions in it. 
+Set your Callback API server address to http://www.example.com/path/to/file/handler.php.
+
 ### Database tables structure
 If you want to use this bot, you'll need to create some tables in your MySQL database. Tables that are used:
 
