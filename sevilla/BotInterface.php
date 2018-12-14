@@ -387,6 +387,7 @@
                     $notification->notify('Выписка с операциями: https://www.redcomm.tk/datasheets/' . $filename); //Уведомляем пользователя
                     break;
                 case CMD_NEW_MEMBER:
+                    if ($this->user_is_admin()) {
                     $code = "var user_id = {$this->object_id};\n" .
                     'API.messages.send({"message": "Сделано. Наверное.", "peer_id": ' . $this->object['peer_id'] . '});' . "\n" . 
                     'return {
@@ -403,7 +404,6 @@
                     //new Log('response: '.$request->responsestr);
                     //var_dump($request->response);
                     $response = json_decode($request->responsestr, true)['response'];
-                    if ($this->user_is_admin()) {
                         $performance->append('members', "
                         {$this->object_id}, 
                         0, 
@@ -600,7 +600,7 @@
                     $performance->append('operations', "DEFAULT, {$item['procedure_id']}, {$timestamp}, 1, {$this->object_id}, '{$this->object['text']}', {$item['balance']}, '{$item['description']}', {$final}");
 
                     $name_first_letter = preg_split('//u', $data['first_name'][0], null, PREG_SPLIT_NO_EMPTY)[0];
-                    $notification->notify($data['last_name'][0] . '! №' . $data['local_id'][0] . '! ' . $data['last_name'][0] . ' ' . $name_first_letter . '.! Да, [id'.$data['user_id'][0].'|Вы]! Минус балл Вам! Выражайтесь культурно!');
+                    $notification->notify($data['last_name'][0] . '! №' . $data['local_id'][0] . '! ' . $data['last_name'][0] . ' ' . $name_first_letter . '.! Да, [id'.$this->object['from_id'].'|Вы]! Минус балл Вам! Выражайтесь культурно!');
 
                     break;
             }
