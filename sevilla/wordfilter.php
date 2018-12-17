@@ -1,7 +1,7 @@
 <?php
 	
 	class WordFilterProcessing {
-		var $blacklist;
+		public $blacklist;
 	
 		function __construct() {
 		  	$str = file_get_contents(dirname(__FILE__) . "/badwords.json");
@@ -18,5 +18,3 @@
 		  	return false;
 		}
 	}
-
-?>

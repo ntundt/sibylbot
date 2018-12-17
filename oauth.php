@@ -1,8 +1,6 @@
 <?php 
 
-	define('APP_ID', '0'); //VK app id
-	define('CLIENT_SECRET', 'SamPlECODe'); //VK app client secret
-	define('HOST', 'https://example.com/path/to/this/file/folder');
+	require_once 'config.php';
 
 	if(isset($_GET['code'])) {
 		$parameters = array(
@@ -44,5 +42,3 @@
 	} else {
 		header('Location: '.HOST.'/index.html', true, 301);
 	}
-
-?>
