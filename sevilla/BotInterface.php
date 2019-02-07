@@ -1,5 +1,7 @@
 <?php
 
+namespace sevilla;
+
 class BotInterface
 {
     public $object;
@@ -17,28 +19,12 @@ class BotInterface
 
     function __construct($object)
     {
-
-        require_once 'log.php';
-        require_once 'polling.php';
-
         $this->request_id = 0;
         $this->payload = array();
         $this->comment = ''; // Комментарий к дейтвию
         $this->object = $object; // Объект сообщения из ВКонтакте
-        $this->cmd_type = CMD_CANT_FIND_SENSE; // Тип команды
         $this->use_You = false; // Будет ли бот использовать местомение "Вы" при обращении к пользователю
         $this->multi = false; // Несколько раз по одному и тому же пункту
-        $command = $object['text']; // Команда для парсинга равна тексту сообщения
-        $command = mb_strtolower($command, 'UTF-8'); // Переводим команду в нижний регистр
-        
-        // Избавляемся от знаков препинания
-        $marks = [',', '?', '.', '!', ':', ';', '(', ')', '—', '–'];
-        for ($i = 0; $i < count($marks); $i++) {
-            $command = str_replace($marks[$i], '', $command);
-        } 
-
-        $command = explode(' ', $command); //Разбиваем команду на слова
-        $this->command = $command;
 
         if (isset($this->object['payload'])) {
             $this->payload = json_decode($this->object['payload'], true);
@@ -172,7 +158,7 @@ class BotInterface
                     $this->cmd_type = CMD_REQUEST_NEXT;
                     break;
                 default:
-                    $this->cmd_type = CMD_CANT_FIND_SENSE;
+                    $this->cmd_type = CMD_NOT_FOUND;
                     break;
             }
         }
@@ -579,7 +565,7 @@ class BotInterface
                     $notification->notify('У Вас нет прав администратора.');
                 }
                 break;
-            case CMD_CANT_FIND_SENSE:
+            case CMD_NOT_FOUND:
                 $notification->notify("Не могу понять, чего Вы от меня хотите. Возможно, что-то из этого Вам поможет:\n\nНе знаете, как составить команду?\nhttps://vk.com/page-173076069_54615607\n\nНашли баг или просто хотите пообщаться с разработчиком?\nhttps://vk.me/id165054978");
                 break;
             case PHRASE_BADWORD_FOUND:

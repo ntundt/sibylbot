@@ -13,7 +13,7 @@ define('CMD_REQUEST_VERIFY', 6);
 define('CMD_REQUEST_REJECT', 7);
 define('CMD_REQUEST_NEXT', 8);
 define('CMD_KEYBOARD_SHOW', 9);
-define('CMD_CANT_FIND_SENSE', 10);
+define('CMD_NOT_FOUND', 10);
 define('PHRASE_BADWORD_FOUND', 11);
 
 define('MAIN_CHAT', 1); // Default peer_id, if peer_id wasn't defined automatically
