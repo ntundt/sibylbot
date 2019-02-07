@@ -1,4 +1,5 @@
 <?php
+
 require_once 'config.php';
 
 if (!isset($_SERVER)) {
@@ -13,7 +14,8 @@ switch ($input['type']) {
         exit(CONFIRMATION_TOKEN);
         break;
     case 'message_new':
-        $bot = new \sevilla\Bot($input['object']);
+        require_once 'sevilla/BotInterface.php';
+        $bot = new BotInterface($input['object']);
         $bot->ok();
         switch ($bot->command[0]) {
             case 'севилла':
@@ -29,10 +31,9 @@ switch ($input['type']) {
             case 'отклонить':
             case 'одобрить':
             case 'пропустить':
-                $bi = new \sevilla\BotInterface($input['object']);
-                $bi->cmd_type = 'CMD_NOT_FOUND';
-                $bi->handlerCommand();
-                $bi->perform();
+                $bot->cmd_type = 'CMD_NOT_FOUND';
+                $bot->handlerCommand();
+                $bot->perform();
                 break;
         }
 

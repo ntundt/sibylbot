@@ -1,18 +1,16 @@
 <?php
 
-namespace sevilla;
-
 class BotInterface
 {
     public $object;
+    public $command;
+    public $object_id;
     public $use_You;
     public $comment;
-    public $command;
     public $payload;
     public $multi;
     public $multifactor;
     public $balance;
-    public $object_id;
     public $procedure;
     public $request_id;
     public $cmd_type;
@@ -24,21 +22,19 @@ class BotInterface
         $this->object = $object;
         //id отправителя
         $this->from_id = $object['from_id'];
-
-        $this->payload = [];
-        // Комментарий к дейтвию
+        // Комментарий к дейcтвию
         $this->comment = '';
         // Будет ли бот использовать местомение "Вы" при обращении к пользователю
         $this->use_You = false;
         // Несколько раз по одному и тому же пункту
         $this->multi = false;
-        // ???
         $this->request_id = 0;
+        //Удаление лишних пробелов, приведение строки к нижнему регистру, разделение по словам
+        $this->command = $this->strHandler($object['text'] ?? '');
 
         if (isset($this->object['payload'])) {
             $this->payload = json_decode($this->object['payload'], true);
         }
-
 
         if (isset($this->payload['request_id'])) {
             $this->request_id = $this->payload['request_id'];
@@ -57,6 +53,50 @@ class BotInterface
                     break;
             }
         }
+    }
+
+    /**
+     * Эй, гайс, у меня всё найс!
+     */
+    public function ok()
+    {
+        ob_start();
+        echo 'ok';
+        $length = ob_get_length();
+        // magic
+        header('Connection: close');
+        header("Content-Length: " . $length);
+        header("Content-Encoding: none");
+        header("Accept-Ranges: bytes");
+        ob_end_flush();
+        ob_flush();
+        flush();
+    }
+
+    /**
+     * Удаление лишних пробелов, приведение строки к нижнему регистру, разделение по словам
+     * @param $text
+     * @return array
+     */
+    public function strHandler($text)
+    {
+        // Избавляемся от знаков препинания
+        $symbols = [',', '.', '?', '!', ':', ';', '(', ')', '—', '–'];
+        $text = str_replace($symbols, ' ', $text);
+
+        //Удаляем лишние пробелы
+        $text = preg_replace('/\s\s+/', ' ', $text);
+
+        //Удаляем пробелы (или другие символы) из начала и конца строки
+        $text = trim($text);
+
+        // Переводим строку в нижний регистр
+        $text = mb_strtolower($text);
+
+        //Разбиваем строку на слова
+        $text = explode(' ', $text);
+
+        return $text;
     }
 
     /**
@@ -108,9 +148,10 @@ class BotInterface
                         }
                     }
                     break;
+                // Пользователь хочет созерцать список операций с его балансом
                 case 'выписка':
                 case 'выписку':
-                case 'операции': // Пользователь хочет созерцать список операций с его балансом
+                case 'операции':
                     $this->cmd_type = CMD_GENERATE_EXTRACTION;
                     $this->object_id = $this->object['from_id'];
                     $this->use_You = true;
@@ -149,7 +190,8 @@ class BotInterface
                         }
                     }
                     break;
-                default: //Если такого слова не нашлось, смотрим, является ли оно числовым, есть ли оно в списке имён и фамилий и не ассоциируется ли оно с каким-либо другим действием
+                //Если такого слова не нашлось, смотрим, является ли оно числовым, есть ли оно в списке имён и фамилий и не ассоциируется ли оно с каким-либо другим действием
+                default:
                     if ((strcmp(preg_split('//u', $this->command[$i], null, PREG_SPLIT_NO_EMPTY)[0], 'x') == 0) or (strcmp(preg_split('//u', $this->command[$i], null, PREG_SPLIT_NO_EMPTY)[0], 'х') == 0)) {
                         $cmd = preg_replace("/[^0-9]/", '', $this->command[$i]);
                         if (intval($cmd) != 0) {
@@ -263,6 +305,7 @@ class BotInterface
      */
     private function user_is_admin()
     {
+        require_once 'polling.php';
         $poll = new Poll();
         return $poll->get(
                 'members',

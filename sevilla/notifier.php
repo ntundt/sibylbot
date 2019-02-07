@@ -1,5 +1,7 @@
 <?php
 
+
+
 class Notifier
 {
     public $request;
@@ -21,7 +23,7 @@ class Notifier
         }
     }
 
-    function notify($text, $params = array())
+    function notify($text, $params = [])
     {
         $this->request->addParameter('message', $text);
         $keys = array_keys($params);

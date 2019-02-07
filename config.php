@@ -19,7 +19,7 @@ define('PHRASE_BADWORD_FOUND', 11);
 define('MAIN_CHAT', 1); // Default peer_id, if peer_id wasn't defined automatically
 //define('ADMIN_CHAT', '');
 
-define('DB_HOST', '127.0.0.1:57300'); //DB host
+define('DB_HOST', '127.0.0.1:49563'); //DB host
 define('DB_USERNAME', ''); // Your database login
 define('DB_PASSWORD', ''); // Your database password
 define('DB_NAME',''); // Default DB name
