@@ -285,6 +285,9 @@ class BotInterface
         }
     }
 
+    /**
+     * Обработка команды
+     */
     function perform()
     { // Обрабатываем команду
         require_once 'performer.php';
@@ -293,40 +296,56 @@ class BotInterface
         require_once 'notifier.php';
         require_once 'keyboard.php';
 
-        $performance = new Performer(); // Этот перформанс ответственен за изменение базы данных в каком-то месте
-        $notification = new Notifier($this->object['id'], (isset($this->object['peer_id']) ? $this->object['peer_id'] : $this->object['from_id'])); // Уведомление пользователя
-        $poll = new Poll(); // Опрос базы данных
+        // Этот перформанс ответственен за изменение базы данных в каком-то месте
+        $performance = new Performer();
 
-        switch ($this->cmd_type) { // Смотрим на тип команды
+        // Уведомление пользователя
+        $notification = new Notifier(
+            $this->object['id'],
+            (isset($this->object['peer_id']) ? $this->object['peer_id'] : $this->object['from_id']));
+
+        // Опрос базы данных
+        $poll = new Poll();
+
+        // Смотрим на тип команды
+        switch ($this->cmd_type) {
             case CMD_BALANCE_CHANGE_BY_PARAGRAPH:
                 if ($this->user_is_admin()) {
-                    if (isset($this->object_id)) { // Если указанный в команде пользователь был найден в БД
+                    // Если указанный в команде пользователь был найден в БД
+                    if (isset($this->object_id)) {
                         $procedures = json_decode(file_get_contents('sevilla/procedures.json'), true); // Открываем список пунктов и переводим его из JSON в обычный ассоциативный массив
                         $finder = new Finder($procedures);
-                        $proc = $finder->find('procedure_id', $this->procedure); // Ищем пункт с таким-то id
+                        // Ищем пункт с таким-то id
+                        $proc = $finder->find('procedure_id', $this->procedure);
                         if (!$proc['excluded']) {
                             $data = $poll->get('members', 'user_id, balance, fname_gen', 'WHERE user_id = ' . $this->object_id); // Получаем текущий счёт и имя пользователя в родительном падеже
                             $current_balance = $data['balance'][0]; // Текущий баланс
+                            // Заменяем значение столбца balance там, где user_id равен object_id
                             $performance->replace(
                                 'members',
                                 'balance',
                                 $current_balance + ($this->multi ? $proc['balance'] * $this->multifactor : $proc['balance']),
                                 'user_id = ' . $this->object_id
-                            ); // Заменяем значение столбца balance там, где user_id равен object_id
-
-                            $timestamp = time(); // Таймштамп
+                            );
+                            // Таймстамп
+                            $timestamp = time();
                             $final = $current_balance + ($this->multi ? $proc['balance'] * $this->multifactor : $proc['balance']); // Новый баланс
                             $result = ($this->multi ? $proc['balance'] * $this->multifactor : $proc['balance']);
-                            $performance->append('operations', "DEFAULT, {$this->procedure}, {$timestamp}, {$this->object['from_id']}, {$this->object_id}, '{$this->comment}', {$result}, '{$proc['description']}', {$final}"); // Добавляем в архив операций соответствующую запись
+                            // Добавляем в архив операций соответствующую запись
+                            $performance->append(
+                                'operations',
+                                "DEFAULT, {$this->procedure}, {$timestamp}, {$this->object['from_id']}, {$this->object_id}, '{$this->comment}', {$result}, '{$proc['description']}', {$final}");
 
                             $notification->notify('Поняла. ' . ($proc['balance'] < 0 ? '' : '+') . $proc['balance'] . ' баллов ' . ($this->multi ? $this->multifactor . ' раз ' : '') . '(' . $proc['description_ru'] . '). Теперь количество баллов у [id' . $data['user_id'][0] . '|' . ($this->use_You ? 'Вас' : $data['fname_gen'][0]) . '] на счету составляет ' . ($current_balance + ($this->multi ? $proc['balance'] * $this->multifactor : $proc['balance'])) . '.'); // Уведомляем пользователя
                         } else {
                             $notification->notify('Этот пункт был исключён. Действия по нему запрашивать больше нельзя.');
                         }
-                    } else { // Если пользователь не указан или не найден
+                    } // Если пользователь не указан или не найден
+                    else {
                         $notification->notify('Вы либо не указали пользователя, либо указали пользователя, которого нет у меня в базе.');
                     }
-                } else { // Если горе-взломщик админом не явялется
+                } // Если горе-взломщик админом не явялется
+                else {
                     $notification->notify('У Вас нет прав администратора.');
                 }
                 break;
@@ -621,9 +640,7 @@ class BotInterface
                 } else {
                     $notification->notify('[id' . $this->object['from_id'] . '|Вас] нет у меня в базе, но я это Ваше высказывание запомню.');
                 }
-
                 break;
         }
     }
-
 }
