@@ -2,12 +2,12 @@
 
 class Poll
 {
-    public $db;
+    private $db;
 
     function __construct()
     {
-
         $this->db = new mysqli(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
+        $this->db->set_charset("utf8");
     }
 
     function get($table, $whatToGet = '*', $somethingElse = '')

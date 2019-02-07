@@ -2,9 +2,12 @@
 
 class Performer
 {
+    private $db;
+
     function __construct()
     {
         $this->db = new mysqli(DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME);
+        $this->db->set_charset("utf8");
     }
 
     function append($table, $data)
