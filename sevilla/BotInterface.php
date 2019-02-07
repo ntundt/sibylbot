@@ -22,13 +22,18 @@ class BotInterface
     {
         // Объект сообщения из ВКонтакте
         $this->object = $object;
+        //id отправителя
         $this->from_id = $object['from_id'];
+
+        $this->payload = [];
+        // Комментарий к дейтвию
+        $this->comment = '';
+        // Будет ли бот использовать местомение "Вы" при обращении к пользователю
+        $this->use_You = false;
+        // Несколько раз по одному и тому же пункту
+        $this->multi = false;
+        // ???
         $this->request_id = 0;
-        $this->payload = array();
-        $this->comment = ''; // Комментарий к дейтвию
-        $this->object = $object; // Объект сообщения из ВКонтакте
-        $this->use_You = false; // Будет ли бот использовать местомение "Вы" при обращении к пользователю
-        $this->multi = false; // Несколько раз по одному и тому же пункту
 
         if (isset($this->object['payload'])) {
             $this->payload = json_decode($this->object['payload'], true);
@@ -57,7 +62,8 @@ class BotInterface
     /**
      * Поиск совпадений с одной из команд
      */
-    public function handlerCommand(){
+    public function handlerCommand()
+    {
         for ($i = 0; $i < count($this->command); $i++) {
             switch ($this->command[$i]) {
                 case 'у':
@@ -251,10 +257,19 @@ class BotInterface
     //    return json_decode($json, true);
     //}
 
+    /**
+     * Проверка в БД, является ли пользователь администратором
+     * @return bool
+     */
     private function user_is_admin()
     {
         $poll = new Poll();
-        return $poll->get('members', 'admin', ' WHERE user_id = ' . $this->object['from_id'])['admin'][0] == 1 ? true : false;
+        return $poll->get(
+                'members',
+                'admin',
+                'WHERE `user_id` = ' . $this->object['from_id']
+            )
+            ['admin'][0] ?? '' == 1 ? true : false;
     }
 
     private function user_find($idword)
