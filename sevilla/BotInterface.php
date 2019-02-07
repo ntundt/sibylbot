@@ -16,9 +16,13 @@ class BotInterface
     public $procedure;
     public $request_id;
     public $cmd_type;
+    private $from_id;
 
     function __construct($object)
     {
+        // Объект сообщения из ВКонтакте
+        $this->object = $object;
+        $this->from_id = $object['from_id'];
         $this->request_id = 0;
         $this->payload = array();
         $this->comment = ''; // Комментарий к дейтвию
@@ -30,7 +34,31 @@ class BotInterface
             $this->payload = json_decode($this->object['payload'], true);
         }
 
-        for ($i = 0; $i < count($this->command); $i++) { // Проходимся по всем словам из команды и ищем в них смысл
+
+        if (isset($this->payload['request_id'])) {
+            $this->request_id = $this->payload['request_id'];
+            switch ($this->payload['action']) {
+                case 'verify':
+                    $this->cmd_type = CMD_REQUEST_VERIFY;
+                    break;
+                case 'reject':
+                    $this->cmd_type = CMD_REQUEST_REJECT;
+                    break;
+                case 'next':
+                    $this->cmd_type = CMD_REQUEST_NEXT;
+                    break;
+                default:
+                    $this->cmd_type = CMD_NOT_FOUND;
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Поиск совпадений с одной из команд
+     */
+    public function handlerCommand(){
+        for ($i = 0; $i < count($this->command); $i++) {
             switch ($this->command[$i]) {
                 case 'у':
                 case 'баллов':
@@ -45,7 +73,7 @@ class BotInterface
                 case 'меня':
                 case 'моего':
                 case 'моим':
-                    $this->object_id = $object['from_id'];
+                    $this->object_id = $this->from_id;
                     break;
                 case 'пункт': // После слова "пункт" обычно следует номер самого пункта
                 case 'пункту':
@@ -66,7 +94,7 @@ class BotInterface
                     } else if (strcmp($this->command[$i + 1], 'у') == 0) {
                         if (strcmp($this->command[$i + 3], 'баллов') == 0) {
                             if (strcmp($this->command[$i + 2], 'меня') == 0) {
-                                $this->object_id = $object['from_id'];
+                                $this->object_id = $this->from_id;
                                 $this->use_You = true;
                             } else {
                                 $this->object_id = $this->user_find($this->command[$i + 2]);
@@ -145,23 +173,6 @@ class BotInterface
             }
         }
 
-        if (isset($this->payload['request_id'])) {
-            $this->request_id = $this->payload['request_id'];
-            switch ($this->payload['action']) {
-                case 'verify':
-                    $this->cmd_type = CMD_REQUEST_VERIFY;
-                    break;
-                case 'reject':
-                    $this->cmd_type = CMD_REQUEST_REJECT;
-                    break;
-                case 'next':
-                    $this->cmd_type = CMD_REQUEST_NEXT;
-                    break;
-                default:
-                    $this->cmd_type = CMD_NOT_FOUND;
-                    break;
-            }
-        }
     }
 
     private function json_fix_cyr($json_str)

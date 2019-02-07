@@ -31,6 +31,7 @@ switch ($input['type']) {
             case 'пропустить':
                 $bi = new \sevilla\BotInterface($input['object']);
                 $bi->cmd_type = 'CMD_NOT_FOUND';
+                $bi->handlerCommand();
                 $bi->perform();
                 break;
         }
