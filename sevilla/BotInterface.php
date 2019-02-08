@@ -104,7 +104,7 @@ class BotInterface
      */
     public function handlerCommand()
     {
-        for ($i = 0; $i < count($this->command); $i++) {
+        for ($i = 1; $i < count($this->command); $i++) {
             switch ($this->command[$i]) {
                 case 'у':
                 case 'баллов':
