@@ -108,7 +108,6 @@ class BotInterface
             switch ($this->command[$i]) {
                 case 'у':
                 case 'баллов':
-                case 'севилла':
                 case 'сгенерируй':
                 case 'дай':
                 case 'с':
@@ -123,8 +122,8 @@ class BotInterface
                     break;
                 case 'пункт': // После слова "пункт" обычно следует номер самого пункта
                 case 'пункту':
-                    $this->procedure = intval($this->command[$i + 1]);
                     $this->cmd_type = CMD_BALANCE_CHANGE_BY_PARAGRAPH;
+                    $this->procedure = intval($this->command[$i + 1]);
                     break;
                 case 'по': // После слова "по" обычно следует слово "пункт"
                     if (strcmp($this->command[$i + 1], 'пункту') == 0) {
@@ -440,7 +439,8 @@ class BotInterface
                         </thead>
                         <tbody>';
                 $keys = array_keys($data);
-                for ($i = 0; $i < count($data['id']); $i++) { //Компонуем это в HTML-таблицу
+                //Компонуем это в HTML-таблицу
+                for ($i = 0; $i < count($data['id']); $i++) {
                     $content .= '<tr>';
                     for ($j = 0; $j < count($keys); $j++) {
                         switch ($keys[$j]) {
@@ -466,6 +466,7 @@ class BotInterface
 
                 $notification->notify('Выписка с операциями: https://www.redcomm.tk/datasheets/' . $filename); // Уведомляем пользователя
                 break;
+
             case CMD_NEW_MEMBER:
                 if ($this->user_is_admin()) {
                     $code = "var user_id = {$this->object_id};\n" .
@@ -681,7 +682,7 @@ class BotInterface
                     $name_first_letter = preg_split('//u', $data['first_name'][0], null, PREG_SPLIT_NO_EMPTY)[0];
                     $notification->notify($data['last_name'][0] . '! №' . $data['local_id'][0] . '! ' . $data['last_name'][0] . ' ' . $name_first_letter . '.! Да, [id' . $this->object['from_id'] . '|Вы]! Минус балл Вам! Выражайтесь культурно!');
                 } else {
-                    $notification->notify('[id' . $this->object['from_id'] . '|Вас] нет у меня в базе, но я это Ваше высказывание запомню.');
+                    $notification->notify('[id' . $this->from_id . '|Вас] нет у меня в базе, но я это Ваше высказывание запомню.');
                 }
                 break;
         }

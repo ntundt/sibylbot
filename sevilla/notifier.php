@@ -1,7 +1,5 @@
 <?php
 
-
-
 class Notifier
 {
     public $request;

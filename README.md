@@ -28,7 +28,7 @@ CREATE TABLE `members`(
 ```
 ```sql
 CREATE TABLE `operations` (
-  `id` int(11) NOT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `type` int(11) NOT NULL,
   `time` int(11) NOT NULL,
   `executor` int(11) NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE `operations` (
 ```
 ```sql
 CREATE TABLE `requests` (
-  `request_id` int(11) NOT NULL,
+  `request_id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `message_id` int(11) NOT NULL,
   `confirmed` tinyint(1) NOT NULL,
   `moderator_id` int(11) NOT NULL,
