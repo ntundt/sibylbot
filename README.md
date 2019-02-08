@@ -12,19 +12,19 @@ If you want to use this bot, you'll need to create some tables in your MySQL dat
 
 ```sql
 CREATE TABLE `members` (
-  `user_id` int(11) NOT NULL,
-  `admin` tinyint(1) NOT NULL,
-  `balance` int(11) NOT NULL,
-  `first_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  `last_name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  `local_id` int(11) NOT NULL,
-  `fname_gen` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `lname_gen` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `fname_dat` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  `lname_dat` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
-  `fname_acc` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `lname_acc` varchar(64) COLLATE utf8_unicode_ci DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+    `local_id` int(11) NOT NULL AUTO_INCREMENT,
+    `user_id` int(11) NOT NULL,
+    `admin` tinyint(1) NOT NULL,
+    `balance` int(11) NOT NULL,
+    `first_name` varchar(255) COLLATE utf8_general_ci NOT NULL,
+    `last_name` varchar(255) COLLATE utf8_general_ci NOT NULL,
+    `fname_gen` varchar(255) COLLATE utf8_general_ci DEFAULT NULL,
+    `lname_gen` varchar(255) COLLATE utf8_general_ci DEFAULT NULL,
+    `fname_dat` varchar(255) COLLATE utf8_general_ci NOT NULL,
+    `lname_dat` varchar(255) COLLATE utf8_general_ci NOT NULL,
+    `fname_acc` varchar(255) COLLATE utf8_general_ci DEFAULT NULL,
+    `lname_acc` varchar(255) COLLATE utf8_general_ci DEFAULT NULL
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 ```
 ```sql
 CREATE TABLE `operations` (
