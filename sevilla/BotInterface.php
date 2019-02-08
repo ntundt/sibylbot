@@ -314,8 +314,13 @@ class BotInterface
             ['admin'][0] ?? '' == 1 ? true : false;
     }
 
+    /**
+     * Поиск пользователя в БД
+     * @param $idword
+     * @return array
+     */
     private function user_find($idword)
-    { // Найти пользователя в БД
+    {
         require_once 'polling.php'; // Импортируем класс для запросов к БД
         $db = new Poll();
         $comparation_queue = array('last_name', 'lname_gen', 'lname_acc', 'lname_dat', 'first_name', 'fname_gen', 'fname_acc', 'fname_dat', 'user_id'); // Столбцы, проходясь по которым, ищем совпадения с неизвестным словом
