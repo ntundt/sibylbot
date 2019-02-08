@@ -11,20 +11,20 @@ Set your Callback API server address to http://www.example.com/path/to/file/hand
 If you want to use this bot, you'll need to create some tables in your MySQL database. Tables that are used:
 
 ```sql
-CREATE TABLE `members` (
-    `local_id` int(11) NOT NULL AUTO_INCREMENT,
-    `user_id` int(11) NOT NULL,
-    `admin` tinyint(1) NOT NULL,
-    `balance` int(11) NOT NULL,
-    `first_name` varchar(255) COLLATE utf8_general_ci NOT NULL,
-    `last_name` varchar(255) COLLATE utf8_general_ci NOT NULL,
-    `fname_gen` varchar(255) COLLATE utf8_general_ci DEFAULT NULL,
-    `lname_gen` varchar(255) COLLATE utf8_general_ci DEFAULT NULL,
-    `fname_dat` varchar(255) COLLATE utf8_general_ci NOT NULL,
-    `lname_dat` varchar(255) COLLATE utf8_general_ci NOT NULL,
-    `fname_acc` varchar(255) COLLATE utf8_general_ci DEFAULT NULL,
-    `lname_acc` varchar(255) COLLATE utf8_general_ci DEFAULT NULL
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+CREATE TABLE `members`(
+    `local_id` INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    `user_id` INT(11) NOT NULL,
+    `admin` TINYINT(1) NOT NULL,
+    `balance` INT(11) NOT NULL,
+    `first_name` VARCHAR(255) COLLATE utf8_general_ci NOT NULL,
+    `last_name` VARCHAR(255) COLLATE utf8_general_ci NOT NULL,
+    `fname_gen` VARCHAR(255) COLLATE utf8_general_ci DEFAULT NULL,
+    `lname_gen` VARCHAR(255) COLLATE utf8_general_ci DEFAULT NULL,
+    `fname_dat` VARCHAR(255) COLLATE utf8_general_ci NOT NULL,
+    `lname_dat` VARCHAR(255) COLLATE utf8_general_ci NOT NULL,
+    `fname_acc` VARCHAR(255) COLLATE utf8_general_ci DEFAULT NULL,
+    `lname_acc` VARCHAR(255) COLLATE utf8_general_ci DEFAULT NULL
+) ENGINE = InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_general_ci
 ```
 ```sql
 CREATE TABLE `operations` (
