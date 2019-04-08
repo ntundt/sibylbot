@@ -189,7 +189,7 @@ class BotInterface
                         }
                     }
                     break;
-                //Если такого слова не нашлось, смотрим, является ли оно числовым, есть ли оно в списке имён и фамилий и не ассоциируется ли оно с каким-либо другим действием
+                // Если такого слова не нашлось, смотрим, является ли оно числовым, есть ли оно в списке имён и фамилий и не ассоциируется ли оно с каким-либо другим действием
                 default:
                     if ((strcmp(preg_split('//u', $this->command[$i], null, PREG_SPLIT_NO_EMPTY)[0], 'x') == 0) or (strcmp(preg_split('//u', $this->command[$i], null, PREG_SPLIT_NO_EMPTY)[0], 'х') == 0)) {
                         $cmd = preg_replace("/[^0-9]/", '', $this->command[$i]);
@@ -270,6 +270,11 @@ class BotInterface
         return $json_str;
     }
 
+    /**
+     * Сохранить картинку локально
+     * @param $url
+     * @return string
+     */
     private function image_local_save($url)
     {
         $vars = json_decode(file_get_contents('vars.json'), true);
@@ -287,16 +292,14 @@ class BotInterface
         return $vars['img_id'] . '.png';
     }
 
-    //private function image_upload($file_name, $url)
-    //{
-    //    $curl = curl_init($url);
-    //    curl_setopt($curl, CURLOPT_POST, true);
-    //    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    //    curl_setopt($curl, CURLOPT_POSTFIELDS, array('file' => new CURLfile($file_name)));
-    //    $json = curl_exec($curl);
-    //    curl_close($curl);
-    //    return json_decode($json, true);
-    //}
+    /**
+     * Добавить пользователя в БД
+     * @param $id
+     */
+    private function db_user_add($id) 
+    {
+
+    }
 
     /**
      * Проверка в БД, является ли пользователь администратором
@@ -336,7 +339,7 @@ class BotInterface
      * Обработка команды
      */
     function perform()
-    { // Обрабатываем команду
+    {
         require_once 'performer.php';
         require_once 'finder.php';
         require_once 'polling.php';
@@ -396,7 +399,7 @@ class BotInterface
                     $notification->notify('У Вас нет прав администратора.');
                 }
                 break;
-            case CMD_BALANCE_CHANGE_BY_ARBITRARY_VALUE: // Практически тоже самое, что и при cmd_type == 0, но на произвольное количество баллов
+            case CMD_BALANCE_CHANGE_BY_ARBITRARY_VALUE: // Практически тоже самое, что и при cmd_type == CMD_BALANCE_CHANGE_BY_PARAGRAPH, но на произвольное количество баллов
                 if ($this->user_is_admin()) {
                     if (isset($this->object_id)) {
                         $data = $poll->get('members', 'user_id, balance, fname_gen', 'WHERE user_id = ' . $this->object_id);
