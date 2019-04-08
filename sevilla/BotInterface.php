@@ -15,6 +15,7 @@ class BotInterface
     public $request_id;
     public $cmd_type;
     private $from_id;
+    private $performer = new Performer()
 
     function __construct($object)
     {
@@ -296,9 +297,36 @@ class BotInterface
      * Добавить пользователя в БД
      * @param $id
      */
-    private function db_user_add($id) 
+    private function db_user_add($id=$this->, $message='Сделано. Наверное.') 
     {
+        $code = "var user_id = {$this->object_id};\n" .
+            'API.messages.send({"message": "'.$message.'", "peer_id": '.$this->object['peer_id'].'});'."\n".
+            'return {
+            "gen": API.users.get({"user_id": user_id, "name_case": "gen"})[0],
+            "acc": API.users.get({"user_id": user_id, "name_case": "acc"})[0],
+            "dat": API.users.get({"user_id": user_id, "name_case": "dat"})[0],
+            "nom": API.users.get({"user_id": user_id, "name_case": "nom"})[0]
+        };';
+        $request = new Request(ACCESS_TOKEN);
+        $request->setMethod('execute');
+        $request->addParameter('code', $code);
+        $request->perform();
+        $response = json_decode($request->responsestr, true)['response'];
 
+        $this->performer->append('members', "
+            {$this->object_id}, 
+            0, 
+            0, 
+            '{$response['nom']['first_name']}', 
+            '{$response['nom']['last_name']}', 
+            DEFAULT, 
+            '{$response['gen']['first_name']}',
+            '{$response['gen']['last_name']}',
+            '{$response['dat']['first_name']}',
+            '{$response['dat']['last_name']}',
+            '{$response['acc']['first_name']}',
+            '{$response['acc']['last_name']}'
+        ");
     }
 
     /**
@@ -352,7 +380,8 @@ class BotInterface
         // Уведомление пользователя
         $notification = new Notifier(
             $this->object['id'],
-            (isset($this->object['peer_id']) ? $this->object['peer_id'] : $this->object['from_id']));
+            (isset($this->object['peer_id']) ? $this->object['peer_id'] : $this->object['from_id'])
+        );
 
         // Опрос базы данных
         $poll = new Poll();
@@ -477,33 +506,34 @@ class BotInterface
 
             case CMD_NEW_MEMBER:
                 if ($this->user_is_admin()) {
-                    $code = "var user_id = {$this->object_id};\n" .
-                        'API.messages.send({"message": "Сделано. Наверное.", "peer_id": ' . $this->object['peer_id'] . '});' . "\n" .
-                        'return {
-                        "gen": API.users.get({"user_id": user_id, "name_case": "gen"})[0],
-                        "acc": API.users.get({"user_id": user_id, "name_case": "acc"})[0],
-                        "dat": API.users.get({"user_id": user_id, "name_case": "dat"})[0],
-                        "nom": API.users.get({"user_id": user_id, "name_case": "nom"})[0]
-                    };';
-                    $request = new Request(ACCESS_TOKEN);
-                    $request->setMethod('execute');
-                    $request->addParameter('code', $code);
-                    $request->perform();
-                    $response = json_decode($request->responsestr, true)['response'];
+                    $this->db_user_add($this->object_id, "Сделано. Наверное.");
+                    // $code = "var user_id = {$this->object_id};\n" .
+                    //     'API.messages.send({"message": "Сделано. Наверное.", "peer_id": ' . $this->object['peer_id'] . '});' . "\n" .
+                    //     'return {
+                    //     "gen": API.users.get({"user_id": user_id, "name_case": "gen"})[0],
+                    //     "acc": API.users.get({"user_id": user_id, "name_case": "acc"})[0],
+                    //     "dat": API.users.get({"user_id": user_id, "name_case": "dat"})[0],
+                    //     "nom": API.users.get({"user_id": user_id, "name_case": "nom"})[0]
+                    // };';
+                    // $request = new Request(ACCESS_TOKEN);
+                    // $request->setMethod('execute');
+                    // $request->addParameter('code', $code);
+                    // $request->perform();
+                    // $response = json_decode($request->responsestr, true)['response'];
 
-                    $performance->append('members', "
-                        {$this->object_id}, 
-                        0, 
-                        0, 
-                        '{$response['nom']['first_name']}', 
-                        '{$response['nom']['last_name']}', 
-                        DEFAULT, 
-                        '{$response['gen']['first_name']}',
-                        '{$response['gen']['last_name']}',
-                        '{$response['dat']['first_name']}',
-                        '{$response['dat']['last_name']}',
-                        '{$response['acc']['first_name']}',
-                        '{$response['acc']['last_name']}'");
+                    // $performance->append('members', "
+                    //     {$this->object_id}, 
+                    //     0, 
+                    //     0, 
+                    //     '{$response['nom']['first_name']}', 
+                    //     '{$response['nom']['last_name']}', 
+                    //     DEFAULT, 
+                    //     '{$response['gen']['first_name']}',
+                    //     '{$response['gen']['last_name']}',
+                    //     '{$response['dat']['first_name']}',
+                    //     '{$response['dat']['last_name']}',
+                    //     '{$response['acc']['first_name']}',
+                    //     '{$response['acc']['last_name']}'");
                 } else {
                     $notification->notify('У Вас нет прав администратора.');
                 }
