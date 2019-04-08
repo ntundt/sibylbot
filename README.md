@@ -1,15 +1,14 @@
 ## О Севилле
-Севилла is a VK bot that could be used as chat-manager and scorecounter
+Севилла — бот для бесед ВКонтакте. Подробнее о ней можно почитать тут: https://vk.com/sevilcounter
 
-How to write commands: https://vk.com/page-173076069_54615607
+Какие Севилла понимает команды: https://vk.com/page-173076069_54615607
 
-### Installation
-Copy files from repo to your folder and then create `datasheets` and `images` folders in it. There is some constants that need to be set in `config.php` file.
-You'll find instructions in it. 
-Set your Callback API server address to http://www.example.com/path_to_file/receiver.php.
+### Установка
+Скопируйте файлы из репозитория к себе в папку и создайте в ней подпапки `datasheets` и `images`. Там будут храниться таблицы, запрошенные пользователями, и картинки из отчётов соответственно. Нужно будет установить кое-какие константы в файле `config.php`.
+В настройках Callback API укажите адрес http://www.example.com/path_to_file/receiver.php.
 
-### Database tables structure
-If you want to use this bot, you'll need to create some tables in your MySQL database. Tables that are used:
+### Структура таблиц базы данных
+Нужно будет вручную создать несколько таблиц, если Вы хотите использовать бота.
 
 ```sql
 CREATE TABLE `members`(
